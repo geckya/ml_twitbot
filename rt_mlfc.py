@@ -9,21 +9,25 @@ api = tweepy.API(auth)
 
 #print(api + '\n')
 
-# For loop to iterate over tweets with #machinelearningflashcards, limit to 10
-for tweet in tweepy.Cursor(api.search,q='#machinelearningflashcards').items():
-    try:
-        # Add \n escape character to print() to organize tweets
-        print('\nTweet by: @' + tweet.user.screen_name)
-        # Retweet tweets as they are found
-        if (not tweet.retweeted) and ('RT @' not in tweet.text):
-           tweet.retweet()
-           print('Retweeted the tweet')
+while True:
 
-        sleep(5)
+    # For loop to iterate over tweets with #machinelearningflashcards, limit to 10
+    for tweet in tweepy.Cursor(api.search,q='#machinelearningflashcards').items(10):
+        try:
+            # Add \n escape character to print() to organize tweets
+            print('\nTweet by: @' + tweet.user.screen_name)
+            # Retweet tweets as they are found
+            if (not tweet.retweeted) and ('RT @' not in tweet.text) and ('chrisalbon' in tweet.user.screen_name):
+                tweet.retweet()
+                print('Retweeted the tweet')
 
-    except tweepy.TweepError as e:
-        print(e.reason)
+            sleep(5)
 
-    except StopIteration:
-        break
+        except tweepy.TweepError as e:
+            print(e.reason)
+
+        except StopIteration:
+            break
+
+    sleep(600)
 
